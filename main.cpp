@@ -17,6 +17,18 @@ void getVersion(const FunctionCallbackInfo<Value>& args) {
     args.GetReturnValue().Set(v8_str(version));
 }
 
+void log(const FunctionCallbackInfo<Value>& args) {
+    for(int i = 0; i < args.Length(); i++) {
+        if(i > 0) {
+            fprintf(stdout, "");
+        }
+        String::Utf8Value str(args.GetIsolate(), args[i]);
+        const char* cstr = *str;
+        fprintf(stdout, "%s", cstr);
+    }
+    fprintf(stdout, "\n");
+}
+
 void XGetter(Local<String> property, const PropertyCallbackInfo<Value>& info) {
     info.GetReturnValue().Set(v8_str(version));
 }
@@ -63,6 +75,7 @@ public:
         this->global = v8::ObjectTemplate::New(this->isolate);
         this->global->SetAccessor(v8_str("__version"), XGetter, XSetter);
         this->global->Set(this->isolate, "getVersion", FunctionTemplate::New(this->isolate, getVersion));
+        this->global->Set(this->isolate, "log", FunctionTemplate::New(this->isolate, log));
     }
 
 
@@ -103,7 +116,7 @@ public:
         v8::Local<v8::Value> result = script->Run(context).ToLocalChecked();
         // 将结果转化为字符串
         v8::String::Utf8Value utf8(this->isolate, result);
-        printf("%s\n", *utf8);
+//        printf("%s\n", *utf8);
     }
 
     void runJSFile(const char* filename) {

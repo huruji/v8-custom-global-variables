@@ -1,3 +1,7 @@
 var a = 10;
-__version;
-getVersion()
+log(__version);
+log(getVersion());
+log("123333");
+log(true);
+log({});
+log(a);
