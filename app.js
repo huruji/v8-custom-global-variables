@@ -5,3 +5,5 @@ log("123333");
 log(true);
 log({});
 log(a);
+
+log(node.version)

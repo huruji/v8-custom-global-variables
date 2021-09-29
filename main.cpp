@@ -72,10 +72,13 @@ public:
     }
 
     void setUpGlobal() {
+        Local<ObjectTemplate> node = ObjectTemplate::New(this->isolate);
         this->global = v8::ObjectTemplate::New(this->isolate);
         this->global->SetAccessor(v8_str("__version"), XGetter, XSetter);
         this->global->Set(this->isolate, "getVersion", FunctionTemplate::New(this->isolate, getVersion));
         this->global->Set(this->isolate, "log", FunctionTemplate::New(this->isolate, log));
+        this->global->Set(this->isolate, "node", node);
+        node->Set(this->isolate, "version", v8_str("1.0.0"));
     }
 
 
